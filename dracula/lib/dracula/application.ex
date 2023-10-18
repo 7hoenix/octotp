@@ -9,7 +9,8 @@ defmodule Dracula.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Dracula.Worker.start_link(arg)
-      # {Dracula.Worker, arg}
+      {Dracula.Server, {:counter2, "42"}},
+      {Dracula.Server, {:counter1, "41"}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
