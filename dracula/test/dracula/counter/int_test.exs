@@ -1,4 +1,4 @@
-defmodule Counter.IntTest do
+defmodule Dracula.Counter.IntTest do
   use ExUnit.Case
 
   test "converts string to integer if string is a textual representation of an integer" do
