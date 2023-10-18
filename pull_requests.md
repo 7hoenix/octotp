@@ -4,3 +4,4 @@
 - Kenneth Short
 - Mike Thiems
 - Roan Urquhart
+- Rachel Fischoff
