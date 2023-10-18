@@ -9,18 +9,17 @@ defmodule Dracula.Server do
     GenServer.start_link(__MODULE__, default, name: name)
   end
 
-  def inc(pid \\ :counter) do
+  def inc(pid \\ :counter1) do
     GenServer.cast(pid, :inc)
   end
 
-  def dec(pid \\ :counter) do
+  def dec(pid \\ :counter1) do
     GenServer.cast(pid, :dec)
   end
 
-  def show(pid \\ :counter) do
+  def show(pid \\ :counter1) do
     GenServer.call(pid, :show)
   end
-
 
   # Server (callbacks)
 
