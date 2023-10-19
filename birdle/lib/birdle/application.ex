@@ -10,6 +10,7 @@ defmodule Birdle.Application do
     children = [
       # Starts a worker by calling: Birdle.Worker.start_link(arg)
       # {Birdle.Worker, arg}
+      {Birdle.BoardServer, :birdle}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
