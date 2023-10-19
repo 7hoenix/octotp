@@ -39,6 +39,22 @@ defmodule Birdle.Game.Score do
   end
 
   def show(score) do
-    # TODO: show the score
+    Enum.map(score, &color_character/1)
+  end
+
+  defp color_character({char, color}) do
+    color_ =
+      case color do
+        :black ->
+          IO.ANSI.light_black_background() <> IO.ANSI.white()
+
+        :yellow ->
+          IO.ANSI.yellow_background() <> IO.ANSI.black()
+
+        :green ->
+          IO.ANSI.green_background() <> IO.ANSI.black()
+      end
+
+    color_ <> char <> IO.ANSI.reset()
   end
 end
