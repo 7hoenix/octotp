@@ -22,7 +22,7 @@ defmodule Birdle.Game.Score do
   defp char_score({char, index}, answer_char_map) do
     color =
       answer_char_map
-      |> Map.get(answer_char_map, char)
+      |> Map.get(char)
       |> then(&get_color(&1, index))
 
     {char, color}
