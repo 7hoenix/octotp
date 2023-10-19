@@ -9,7 +9,7 @@ defmodule Birdle.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Birdle.Worker.start_link(arg)
-      # {Birdle.Worker, arg}
+      Birdle.Game.Words
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
