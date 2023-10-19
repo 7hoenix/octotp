@@ -1,5 +1,6 @@
 defmodule Birdle.Game.Board do
   alias Birdle.Game.Words
+  alias Birdle.Game.Score
 
   defstruct [:answer, :guesses_reversed]
 
@@ -15,10 +16,12 @@ defmodule Birdle.Game.Board do
   end
 
   def show(board) do
-
-  end
-
-  defp row(answer, guess) do
-    "guess"
+    board.guesses_reversed
+    |> Enum.map(fn guess ->
+      Score.new(board.answer, guess)
+      |> Score.show()
+    end)
+    |> Enum.reverse()
+    |> Enum.join("\n")
   end
 end
