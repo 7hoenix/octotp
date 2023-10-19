@@ -1,41 +1,35 @@
 defmodule Birdle.Game.Score do
-
   def new(answer, guess) do
-    answer_char_map =
-      answer
-      |> String.graphemes()
+    answer_letters = String.graphemes(answer)
+    guess_letters = String.graphemes(guess)
+
+    missing = guess_letters -- answer_letters
+
+    zipped = Enum.zip(answer_letters, guess_letters)
+
+    only_greens_marked =
+      Enum.map(zipped, fn {a, g} ->
+        if a == g do
+          {g, :green}
+        else
+          {g, :yellow}
+        end
+      end)
       |> Enum.with_index()
-      |> Enum.reduce(%{}, &answer_to_char_map/2)
 
-    guess_chars =
-      guess
-      |> String.graphemes()
-      |> Enum.with_index()
+    set_blacks = Enum.reduce(missing, only_greens_marked, &replace_one_letter/2)
 
-    Enum.map(guess_chars, &char_score(&1, answer_char_map))
+    Enum.map(set_blacks, &elem(&1, 0))
   end
 
-  defp answer_to_char_map({char, index}, acc) do
-    Map.update(acc, char, [index], fn positions -> [index | positions] end)
-  end
+  defp replace_one_letter(letter, acc) do
+    {{let, col}, index} =
+      replacement =
+      Enum.find(acc, fn {{l, c}, i} ->
+        c != :green and letter == l
+      end)
 
-  defp char_score({char, index}, answer_char_map) do
-    color =
-      answer_char_map
-      |> Map.get(char)
-      |> then(&get_color(&1, index))
-
-    {char, color}
-  end
-
-  defp get_color(nil, _index), do: :black
-
-  defp get_color(positions, index) do
-    if Enum.any?(positions, index) do
-      :green
-    else
-      :yellow
-    end
+    List.replace_at(acc, index, {{let, :black}, index})
   end
 
   def show(score) do

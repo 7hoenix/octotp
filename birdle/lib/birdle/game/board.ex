@@ -15,7 +15,7 @@ defmodule Birdle.Game.Board do
   end
 
   def show(board) do
-    # convert to printable version use the score module
+
   end
 
   defp row(answer, guess) do
