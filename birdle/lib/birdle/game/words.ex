@@ -5,6 +5,7 @@ defmodule Birdle.Game.Words do
 
   {:ok, contents} = File.read("../words.txt")
   @list String.split(contents, "\n", trim: true)
+  @num_words length(@list)
   @set MapSet.new(@list)
 
   def random, do: Enum.random(@list)
@@ -13,8 +14,8 @@ defmodule Birdle.Game.Words do
 
   # Client
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, nil, name: :birdle_words_server)
+  def start_link(seed) do
+    GenServer.start_link(__MODULE__, seed, name: :birdle_words_server)
   end
 
   def get(pid \\ :birdle_words_server) do
@@ -28,8 +29,17 @@ defmodule Birdle.Game.Words do
   # Server (callbacks)
 
   @impl true
-  def init(_) do
-    {:ok, Enum.shuffle(@list)}
+  def init({y, m, d}) do
+    origin = Date.new!(y, m, d)
+    today = Date.utc_today()
+    count = Date.diff(today, origin)
+    offset = rem(count, @num_words)
+    step = (count / @num_words) |> floor
+    new_seed = {y, m, d + step}
+    :rand.seed(:exsss, new_seed)
+    full_list = Enum.shuffle(@list)
+    current_list = Enum.drop(full_list, offset)
+    {:ok, current_list}
   end
 
   @impl true
