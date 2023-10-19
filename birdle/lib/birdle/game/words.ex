@@ -5,7 +5,7 @@ defmodule Birdle.Game.Words do
   @list String.split(contents, "\n", trim: true)
   @set MapSet.new(@list)
 
-  def random do
-    Enum.random(@list)
-  end
+  def random, do: Enum.random(@list)
+
+  def member?(word), do: MapSet.member?(@set, word)
 end
