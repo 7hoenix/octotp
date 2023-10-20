@@ -26,7 +26,7 @@ defmodule Birdle.Game.Score do
     {{let, col}, index} =
       replacement =
       Enum.find(acc, fn {{l, c}, i} ->
-        c != :green and letter == l
+        c == :yellow and letter == l
       end)
 
     List.replace_at(acc, index, {{let, :black}, index})
