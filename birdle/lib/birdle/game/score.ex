@@ -5,7 +5,7 @@ defmodule Birdle.Game.Score do
 
     missing = guess_letters -- answer_letters
 
-    zipped = Enum.zip(answer_letters, guess_letters)
+    zipped = Enum.reverse(Enum.zip(answer_letters, guess_letters))
 
     only_greens_marked =
       Enum.map(zipped, fn {a, g} ->
@@ -19,14 +19,14 @@ defmodule Birdle.Game.Score do
 
     set_blacks = Enum.reduce(missing, only_greens_marked, &replace_one_letter/2)
 
-    Enum.map(set_blacks, &elem(&1, 0))
+    Enum.reverse(Enum.map(set_blacks, &elem(&1, 0)))
   end
 
   defp replace_one_letter(letter, acc) do
     {{let, col}, index} =
       replacement =
       Enum.find(acc, fn {{l, c}, i} ->
-        c != :green and letter == l
+        c == :yellow and letter == l
       end)
 
     List.replace_at(acc, index, {{let, :black}, index})
