@@ -30,6 +30,7 @@ defmodule Birdle.Game.Words do
 
   @impl true
   def init({y, m, d}) do
+    IO.puts("started: words server")
     origin = Date.new!(y, m, d)
     today = Date.utc_today()
     count = Date.diff(today, origin)
