@@ -11,7 +11,8 @@ defmodule Birdle.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Birdle.Worker.start_link(arg)
-      {Birdle.Game.Words, @birdle_word_server_origin}
+      {Birdle.Game.Words, @birdle_word_server_origin},
+      {Birdle.BoardServer, :birdle}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
