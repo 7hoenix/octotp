@@ -12,12 +12,13 @@ defmodule Birdle.Application do
     children = [
       # Starts a worker by calling: Birdle.Worker.start_link(arg)
       {Birdle.Game.Words, @birdle_word_server_origin},
-      {Birdle.BoardServer, :birdle}
+      {DynamicSupervisor, name: :dsup, strategy: :one_for_one},
+      %{id: :test, start: {Birdle.BoardServer, :start_link, [:robin]}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Birdle.Supervisor]
+    opts = [strategy: :rest_for_one, name: Birdle.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

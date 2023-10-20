@@ -1,12 +1,12 @@
 defmodule Birdle.BoardServer do
   use GenServer
 
-  alias Birdle.Game.{Board, Validate}
+  alias Birdle.Game.{Board, Validate, Words}
 
   # Client
 
   def start_link(name) do
-    GenServer.start_link(__MODULE__, :unused, name: name)
+    GenServer.start_link(__MODULE__, name, name: name)
   end
 
   def add_guess(pid, guess) do
@@ -16,8 +16,11 @@ defmodule Birdle.BoardServer do
   # Server (callbacks)
 
   @impl true
-  def init(_) do
-    initial = Board.new()
+  def init(name) do
+    IO.puts("started: #{name}")
+    Words.new_word()
+    word = Words.get()
+    initial = Board.new(word)
 
     {:ok, initial}
   end
@@ -33,5 +36,9 @@ defmodule Birdle.BoardServer do
       {:error, error_message} ->
         {:reply, error_message, state}
     end
+  end
+
+  def child_spec(name) do
+    %{id: name, start: {__MODULE__, :start_link, [name]}}
   end
 end

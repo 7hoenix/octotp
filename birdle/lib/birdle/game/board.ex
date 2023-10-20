@@ -4,9 +4,9 @@ defmodule Birdle.Game.Board do
 
   defstruct [:answer, :guesses_reversed]
 
-  def new do
+  def new(word) do
     %__MODULE__{
-      answer: Words.random(),
+      answer: word,
       guesses_reversed: []
     }
   end
