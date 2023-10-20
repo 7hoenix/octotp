@@ -5,11 +5,13 @@ defmodule Birdle.Application do
 
   use Application
 
+  @birdle_word_server_origin {2023, 10, 12}
+
   @impl true
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Birdle.Worker.start_link(arg)
-      # {Birdle.Worker, arg}
+      {Birdle.Game.Words, @birdle_word_server_origin}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
