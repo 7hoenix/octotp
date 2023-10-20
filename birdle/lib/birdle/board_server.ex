@@ -3,8 +3,6 @@ defmodule Birdle.BoardServer do
 
   alias Birdle.Game.{Board, Validate}
 
-  # TODO: Complete Validation
-
   # Client
 
   def start_link(name) do
@@ -12,13 +10,7 @@ defmodule Birdle.BoardServer do
   end
 
   def add_guess(pid, guess) do
-    case result = Validate.validate(guess, []) do
-      :ok ->
-        GenServer.call(pid, {:add_guess, guess}) |> IO.puts()
-
-      _ ->
-        elem(result, 1)
-    end
+    GenServer.call(pid, {:add_guess, guess}) |> IO.puts()
   end
 
   # Server (callbacks)
@@ -32,8 +24,14 @@ defmodule Birdle.BoardServer do
 
   @impl true
   def handle_call({:add_guess, guess}, _from, state) do
-    new_state = Board.add_guess(state, guess)
+    case Validate.validate(guess, state.guesses_reversed) do
+      :ok ->
+        new_state = Board.add_guess(state, guess)
+        to_client = Board.show(new_state)
+        {:reply, to_client, new_state}
 
-    {:reply, Board.show(new_state), new_state}
+      {:error, error_message} ->
+        {:reply, error_message, state}
+    end
   end
 end
